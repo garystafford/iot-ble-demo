@@ -2,7 +2,7 @@ import sys
 import time
 from argparse import ArgumentParser
 
-from bluepy import btle
+from bluepy import btle # linux only (no mac)
 from colr import color as colr
 
 
@@ -13,49 +13,60 @@ from colr import color as colr
 
 
 def byte_array_to_int(value):
-    # If the value is not recognized as GATT and converted properly, then it is
-    # left as a byte array of four int values (hex) which need to be reversed
-    # value = bytearray.fromhex(value)
-    print(f"{sys._getframe().f_code.co_name}: {value}")
+    # Raw data is hexstring of int values, as a series of bytes, in little endian byte order
+    # values are converted from bytes -> bytearray -> int
+    # e.g., b'\x11\x0f\x0f\x00' -> bytearray(b'\x97\x0f\x0f\x00') -> 9869
+
+    # print(f"{sys._getframe().f_code.co_name}: {value}")
+
     value = bytearray(value)
-    value.reverse()
-    value = int.from_bytes(value, byteorder="big")
+    value = int.from_bytes(value, byteorder="little")
     return value
 
 
 def split_color_str_to_array(value):
+    # e.g., b'2660,2059,1787,4097\x00' -> 2660,2059,1787,4097 ->
+    #       [2660, 2059, 1787, 4097] -> 166.0,128.0,111.0,255.0
+
     # print(f"{sys._getframe().f_code.co_name}: {value}")
 
     # remove extra bit on end (e.g. b'534,300,234,983\x00')
     value = value[0:-1]
 
-    # split r, g, b, a values into array
-    values = value.split(",")
+    # split r, g, b, a values into array of 16-bit ints
+    values = list(map(int, value.split(",")))
+    print(f"16-bit Color values (r,g,b,a): {values}")
 
-    # convert from 16-bit ints (2^16 or 0-65535)
-    # to 8-bit ints (2^8 or 0-255)
-    values[:] = [int(v) % 256 for v in values]
+    # convert from 16-bit ints (2^16 or 0-65535) to 8-bit ints (2^8 or 0-255)
+    # values[:] = [int(v) % 256 for v in values]
+
+    # bug with Arduino library or sensor or my code
+    # actual sensor is reading values from 0 - 4097
+    values[:] = [round(int(v) / (4097 / 255), 0) for v in values]
 
     return values
 
 
 def byte_array_to_char(value):
-    # print(f"{sys._getframe().f_code.co_name}: {value}")
-
-    return value.decode("utf-8")
+    # e.g., b'2660,2058,1787,4097\x00' -> 2659,2058,1785,4097
+    value = value.decode("utf-8")
+    return value
 
 
 def decimal_exponent_two(value):
+    # e.g., 2350 -> 23.5
     return value / 100
 
 
 def decimal_exponent_one(value):
+    # e.g., 988343 -> 98834.3
     return value / 10
 
 
 def pascals_to_kilopascals(value):
     # 1 Kilopascal (kPa) is equal to 1000 pascals (Pa)
-    # To convert kPa to pascal, multiply the kPa value by 1000
+    # to convert kPa to pascal, multiply the kPa value by 1000
+    # 98834.3 -> 98.8343
     return value / 1000
 
 
@@ -67,11 +78,12 @@ def read_color(service):
     color_char = service.getCharacteristics("936b6a25-e503-4f7c-9349-bcc76c22b8c3")[0]
     color = color_char.read()
     color = byte_array_to_char(color)
-    print(f"16-bit Color values (r,g,b,a): {color}")
     color = split_color_str_to_array(color)
     print(f" 8-bit Color values (r,g,b,a): {color[0]},{color[1]},{color[2]},{color[3]}")
-    print("Color Swatch")
+    print("RGB Color")
     print(colr('\t\t', fore=(127, 127, 127), back=(color[0], color[1], color[2])))
+    print("Light Intensity")
+    print(colr('\t\t', fore=(127, 127, 127), back=(color[3], color[3], color[3])))
 
 
 def read_pressure(service):

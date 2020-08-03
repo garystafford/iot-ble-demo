@@ -104,7 +104,7 @@ void setup() {
     tempCharacteristic.setValue(0);     // Set initial temperature value
     humidCharacteristic.setValue(0);    // Set initial humidity value
     pressureCharacteristic.setValue(0); // Set initial pressure value
-    colorCharacteristic.setValue("");    // Set initial color value
+    colorCharacteristic.setValue("");   // Set initial color value
 
     BLE.advertise(); // Start advertising
     Serial.print("Peripheral device MAC: ");

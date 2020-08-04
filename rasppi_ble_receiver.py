@@ -9,7 +9,8 @@ from colr import color as colr
 # BLE IoT Sensor Demo
 # Author: Gary Stafford
 # Reference: https://elinux.org/RPi_Bluetooth_LE
-# sudo python3 -m pip install --user bluepy colr
+# Requirements: sudo python3 -m pip install --user bluepy colr
+# To Run: python3 ./rasppi_ble_receiver.py d1:aa:89:0c:ee:82 <- MAC address - change me!
 
 
 def byte_array_to_int(value):

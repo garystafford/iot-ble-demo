@@ -2,7 +2,7 @@ import sys
 import time
 from argparse import ArgumentParser
 
-from bluepy import btle # linux only (no mac)
+from bluepy import btle  # linux only (no mac)
 from colr import color as colr
 
 

@@ -204,6 +204,7 @@ void updateReadings() {
     stringColor = stringColor + b;
     stringColor = stringColor + ",";
     stringColor = stringColor + a;
+
     if (stringColor != previousColor) { // If reading has changed
 
         byte bytes[stringColor.length() + 1];

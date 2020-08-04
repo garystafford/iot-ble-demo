@@ -30,18 +30,18 @@ def split_color_str_to_array(value):
 
     # print(f"{sys._getframe().f_code.co_name}: {value}")
 
-    # remove extra bit on end (e.g. b'534,300,234,983\x00')
+    # remove extra bit on end ('\x00')
     value = value[0:-1]
 
     # split r, g, b, a values into array of 16-bit ints
     values = list(map(int, value.split(",")))
-    print(f"16-bit Color values (r,g,b,a): {values}")
 
     # convert from 16-bit ints (2^16 or 0-65535) to 8-bit ints (2^8 or 0-255)
     # values[:] = [int(v) % 256 for v in values]
 
-    # bug with Arduino library or sensor or my code
-    # actual sensor is reading values from 0 - 4097
+    # actual sensor is reading values are from 0 - 4097
+    # print(f"12-bit Color values (r,g,b,a): {values}")
+
     values[:] = [round(int(v) / (4097 / 255), 0) for v in values]
 
     return values

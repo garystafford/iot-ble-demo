@@ -40,7 +40,7 @@ def split_color_str_to_array(value):
     # values[:] = [int(v) % 256 for v in values]
 
     # actual sensor is reading values are from 0 - 4097
-    # print(f"12-bit Color values (r,g,b,a): {values}")
+    print(f"12-bit Color values (r,g,b,a): {values}")
 
     values[:] = [round(int(v) / (4097 / 255), 0) for v in values]
 

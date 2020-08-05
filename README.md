@@ -1,3 +1,3 @@
-# Getting Started with Bluetooth Low Energy (BLE) and Generic Attribute Profile (GATT) Specification for IoT
+# BLE and GATT for IoT: Getting Started with Bluetooth Low Energy and the Generic Attribute Profile Specification for IoT
 
-Code for the upcoming post, 'Getting Started with Bluetooth Low Energy (BLE) and Generic Attribute Profile (GATT) Specification for IoT'.
+Code for the post, [BLE and GATT for IoT: Getting Started with Bluetooth Low Energy and the Generic Attribute Profile Specification for IoT](https://tinyurl.com/iot-ble-post).

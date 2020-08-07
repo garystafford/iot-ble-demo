@@ -13,6 +13,30 @@ from colr import color as colr
 # To Run: python3 ./rasppi_ble_receiver.py d1:aa:89:0c:ee:82 <- MAC address - change me!
 
 
+def main():
+    # get args
+    args = get_args()
+
+    print("Connecting...")
+    nano_sense = btle.Peripheral(args.mac_address)
+
+    print("Discovering Services...")
+    _ = nano_sense.services
+    environmental_sensing_service = nano_sense.getServiceByUUID("181A")
+
+    print("Discovering Characteristics...")
+    _ = environmental_sensing_service.getCharacteristics()
+
+    while True:
+        print("\n")
+        read_temperature(environmental_sensing_service)
+        read_humidity(environmental_sensing_service)
+        read_pressure(environmental_sensing_service)
+        read_color(environmental_sensing_service)
+
+        # time.sleep(2) # transmittion frequency set on IoT device
+
+
 def byte_array_to_int(value):
     # Raw data is hexstring of int values, as a series of bytes, in little endian byte order
     # values are converted from bytes -> bytearray -> int
@@ -118,30 +142,6 @@ def get_args():
     arg_parser.add_argument('mac_address', help="MAC address of device to connect")
     args = arg_parser.parse_args()
     return args
-
-
-def main():
-    # get args
-    args = get_args()
-
-    print("Connecting...")
-    nano_sense = btle.Peripheral(args.mac_address)
-
-    print("Discovering Services...")
-    _ = nano_sense.services
-    environmental_sensing_service = nano_sense.getServiceByUUID("181A")
-
-    print("Discovering Characteristics...")
-    _ = environmental_sensing_service.getCharacteristics()
-
-    while True:
-        print("\n")
-        read_temperature(environmental_sensing_service)
-        read_humidity(environmental_sensing_service)
-        read_pressure(environmental_sensing_service)
-        read_color(environmental_sensing_service)
-
-        # time.sleep(2) # transmittion frequency set on IoT device
 
 
 if __name__ == "__main__":

@@ -141,7 +141,7 @@ def main():
         read_pressure(environmental_sensing_service)
         read_color(environmental_sensing_service)
 
-        time.sleep(2)
+        # time.sleep(2) # transmittion frequency set on IoT device
 
 
 if __name__ == "__main__":

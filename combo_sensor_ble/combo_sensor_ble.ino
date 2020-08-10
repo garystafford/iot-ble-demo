@@ -197,13 +197,13 @@ void updateReadings() {
     // Get color reading everytime
     // e.g. "12345,45678,89012,23456"
     String stringColor = "";
-    stringColor = stringColor + r;
-    stringColor = stringColor + ",";
-    stringColor = stringColor + g;
-    stringColor = stringColor + ",";
-    stringColor = stringColor + b;
-    stringColor = stringColor + ",";
-    stringColor = stringColor + a;
+    stringColor += r;
+    stringColor += ",";
+    stringColor += g;
+    stringColor += ",";
+    stringColor += b;
+    stringColor += ",";
+    stringColor += a;
 
     if (stringColor != previousColor) { // If reading has changed
 

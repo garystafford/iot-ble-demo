@@ -34,7 +34,7 @@ def main():
         read_pressure(environmental_sensing_service)
         read_color(environmental_sensing_service)
 
-        # time.sleep(2) # transmittion frequency set on IoT device
+        # time.sleep(2) # transmission frequency set on IoT device
 
 
 def byte_array_to_int(value):
